@@ -58,10 +58,14 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="animation.js" />
     <Content Include="assetmanager.js" />
+    <Content Include="Entity.js" />
     <Content Include="gameengine.js" />
     <Content Include="index.html" />
     <Content Include="main.js" />
+    <Content Include="Survivor.js" />
+    <Content Include="Tile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
