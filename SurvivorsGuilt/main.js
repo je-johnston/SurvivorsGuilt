@@ -28,16 +28,20 @@ AM.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.start();
 
+    var tileOne = new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 200, "dirt1");
+    var tileTwo = new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 264, 264, "dirt1");
+    var tileThree = new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 264, "dirt1");
+    var tileFour = new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 264, 200, "dirt1");
+    gameEngine.addEntity(tileOne);
+    gameEngine.addEntity(tileTwo);
+    gameEngine.addEntity(tileThree);
+    gameEngine.addEntity(tileFour);
     var tempSurvivor = new Survivor(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 200);
     gameEngine.addEntity(tempSurvivor);
 
-    gameEngine.addEntity(new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 300, 300, "dirt1"));
+    
 
-    //var img = new Image();
-    //img.src = './Assets/img/Scavengers_SpriteSheet.png';
-
-    //gameEngine.addEntity(new Tile(gameEngine, img, 300, 300), "dirt1");
-
+   
 
     console.log("All Done!");
 });

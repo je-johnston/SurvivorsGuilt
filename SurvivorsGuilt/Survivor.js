@@ -1,5 +1,8 @@
 ﻿
-
+/*
+* Survivor Class
+* Represents the Player on the gameboard.
+*/
 class Survivor extends Entity {
     constructor(game, spritesheet, x, y) {
         super(game, x, y);
@@ -13,8 +16,17 @@ class Survivor extends Entity {
         Entity.prototype.draw.call(this);
     }
 
+    update() {
+        //Test Code.
+        //this.x += this.game.clockTick * 44;
+        //if (this.x > 800) this.x = -200;
+        //Entity.prototype.update.call(this);
+    }
+
 
 }
+
+
 
 //Legacy Code
 
