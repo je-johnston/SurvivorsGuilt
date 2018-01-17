@@ -10,7 +10,14 @@ class Tile extends Entity {
         this.x = x;
         this.y = y;
         console.log(type + " Tile created at X = " + x + " Y = " + y);
+    }
 
+    getX() {
+        return this.x;
+    }
+
+    getY() {
+        return this.y;
     }
 
     update() {
