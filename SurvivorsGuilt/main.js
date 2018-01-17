@@ -18,7 +18,7 @@ Background.prototype.update = function () {
 };
 
 AM.queueDownload("./Assets/img/Scavengers_SpriteSheet.png");
-
+AM.queueDownload("./Assets/img/Scavengers_SpriteSheet_2.png");
 
 AM.downloadAll(function () {
     var canvas = document.getElementById("gameWorld");
@@ -28,7 +28,15 @@ AM.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.start();
 
-    gameEngine.addEntity(new Survivor(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 200));
+    var tempSurvivor = new Survivor(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 200);
+    gameEngine.addEntity(tempSurvivor);
+
+    gameEngine.addEntity(new Tile(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 300, 300, "dirt1"));
+
+    //var img = new Image();
+    //img.src = './Assets/img/Scavengers_SpriteSheet.png';
+
+    //gameEngine.addEntity(new Tile(gameEngine, img, 300, 300), "dirt1");
 
 
     console.log("All Done!");
