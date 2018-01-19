@@ -61,7 +61,9 @@
     <Content Include="animation.js" />
     <Content Include="assetmanager.js" />
     <Content Include="Entity.js" />
+    <Content Include="GameBoard.js" />
     <Content Include="gameengine.js" />
+    <Content Include="GameManager.js" />
     <Content Include="index.html" />
     <Content Include="main.js" />
     <Content Include="Survivor.js" />

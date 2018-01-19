@@ -4,7 +4,6 @@
     this.y = y;
     this.removeFromWorld = false;
 
-    //console.log("Entity Created.");
 }
 
 Entity.prototype.update = function () {
