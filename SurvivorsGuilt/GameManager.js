@@ -8,13 +8,12 @@ class GameManager {
         gameEngine.init(ctx);
         gameEngine.start();
 
-        var gb = new GameBoard(gameEngine, 100, 500, 10, 10);
-
-        var tempSurvivor = new Survivor(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), 200, 200);
-        gameEngine.addEntity(tempSurvivor);
-
+        var gb = new GameBoard(gameEngine, 75, 75, 10, 10, 6);
+        var surv = new Survivor(gameEngine, AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png"), gb.findTile(1,8));
+        gameEngine.addEntity(surv);
 
 
+        
 
     }
 

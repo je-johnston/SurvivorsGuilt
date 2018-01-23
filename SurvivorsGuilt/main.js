@@ -24,5 +24,8 @@ AM.downloadAll(function () {
 
     var gm = new GameManager();
 
+    
+
+
     console.log("All Done!");
 });

@@ -12,7 +12,7 @@ class Tile extends Entity {
         this.y = y;
         this.tileX = tileX;
         this.tileY = tileY;
-
+        this.type = type;
 
         //The X and Y Coordinates of this tile on the sprite sheet. 128 is the default value.
         var sheetX = 128;
@@ -30,8 +30,8 @@ class Tile extends Entity {
         var isDamaged;
         
         this.findTileType(type);
-        
 
+        //this.render();
         console.log(type + " Tile at (" + this.tileX + "," + this.tileY + ")"+ " created at canvas position X = " + x + " Y = " + y);
     }
 
@@ -41,6 +41,11 @@ class Tile extends Entity {
 
     getY() {
         return this.y;
+    }
+
+    setType(t) {
+        this.type = t;
+        this.findTileType(t);
     }
 
     getTileX() {
@@ -125,7 +130,6 @@ class Tile extends Entity {
                 this.isDamageable = true;
                 this.hasBeenDamaged = false;
                 var randNum = Math.floor((Math.random() * 5) + 1);
-                console.log("Debug - Thorn RandNum = " + randNum);
                 switch (randNum) {
                     case 1:
                         this.sheetX = 160;
@@ -167,9 +171,15 @@ class Tile extends Entity {
         }
 
 
-        
+        //this.render();
 
     }
+
+    //render() {
+    //    console.log("Rendering Tile");
+    //    this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
+    //}
+
 
 
     draw() {

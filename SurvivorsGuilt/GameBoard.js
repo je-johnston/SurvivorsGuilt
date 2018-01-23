@@ -1,31 +1,86 @@
 ﻿
 class GameBoard {
-    constructor(gameEngine, startingX, startingY, boardWidth, boardHeight) {
+
+    constructor(gameEngine, startingX, startingY, boardWidth, boardHeight, numThorns) {
 
         this.gameEngine = gameEngine;
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         this.startingX = startingX;
         this.startingY = startingY;
-
+        this.numThorns = numThorns;
         var asset = AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png");
-      
-        //var tileOne = new Tile(gameEngine, asset, 100, 600,0,0, "thorns");
-        //gameEngine.addEntity(tileOne);
+
+        
+
+
 
         //Create a 2D array representing the game board.
-        var myBoard = new Array(this.boardHeight + 1); //+1 for the 'wall' tiles / perimeter.
-        for (var i = 0; i < boardWidth + 1; i++) {
-            //myBoard[i] = new Array(this.boardWidth + 1);
+        var myBoard = [];
+        for (var i = 0; i < boardWidth; i++) {
+            myBoard[i] = new Array(this.boardWidth);
         }
 
-        this.createBoard();
+        //Add Tiles to the game board.
+        for (var i = 0; i < this.boardHeight; i++) {
+            for (var j = 0; j < this.boardWidth; j++) {
+                //Tiles are "dirt" by default.
+                var tileType = "dirt";
+                //If at the edges of the map, place impassable walls.
+                if (i === 0 || j === 0 || i === (this.boardWidth - 1) || j === (this.boardHeight - 1)) {
+                    tileType = "wall";
+                }
+
+                var tile = new Tile(gameEngine, asset, this.startingX + (i*64), this.startingY+(j*64), i, j, tileType);
+                myBoard[i][j] = tile;
+
+            }
+        }
+
+
+        //Place a number of obstacle tiles around the map.
+        while (numThorns > 0) {
+
+
+            var randX = this.getRand(2, (this.boardWidth - 3));
+            var randY = this.getRand(2, (this.boardHeight - 3));
+
+            var tempTile = myBoard[randX][randY];
+
+            if (tempTile.getType() != "dirt") {
+                continue; 
+                
+            }
+
+            tempTile.setType("thorns"); 
+            numThorns--;
+        }
+
+
+        //Add all tiles to the game engine.
+        for (var i = 0; i < this.boardHeight; i++) {
+            for (var j = 0; j < this.boardWidth; j++) {
+                gameEngine.addEntity(myBoard[i][j]);
+            }
+        }
+
+
+        this.findTile = function (tx, ty) {
+            return myBoard[tx][ty];
+        }
+
+        
     }
 
-    createBoard() {
-        console.log("Creating the gameboard.");
 
+
+        getRand(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
     }
+
+
 
 
 }
