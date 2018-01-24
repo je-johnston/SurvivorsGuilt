@@ -45,17 +45,6 @@ class TurnManager {
             //If survivor has not reached exit, resolve the enemy's actions.
 
 
-
-
-
-
-            //console.log("Waiting...");
-            //setTimeout(function () {
-            //    this.inputAccepted = true;
-            //}, 1500);
-            //console.log("Done Waiting.");
-
-
             //Return input to user.
             this.inputAccepted = true;
         }
@@ -72,14 +61,16 @@ class TurnManager {
                 var candidateTile = this.gameboard.findTile(survTile.getTileX() + 1, survTile.getTileY());
                 if (candidateTile.canBePassed()) {
                     this.survivor.setTile(candidateTile);
+                    this.survivor.setState('idleRight');
                 } else {
-                    
+                    this.survivor.setState('idleRight');
                 }
                 break;
             case 'w': //Attempt to move the survivor up.
                 var candidateTile = this.gameboard.findTile(survTile.getTileX(), survTile.getTileY() - 1);
                 if (candidateTile.canBePassed()) {
                     this.survivor.setTile(candidateTile);
+                    
                 } else {
 
                 }
@@ -89,8 +80,9 @@ class TurnManager {
                 var candidateTile = this.gameboard.findTile(survTile.getTileX() - 1, survTile.getTileY());
                 if (candidateTile.canBePassed()) {
                     this.survivor.setTile(candidateTile);
+                    this.survivor.setState('idleLeft');
                 } else {
-
+                    this.survivor.setState('idleLeft');
                 }
                 break;
             case 's': //Attempt to move the survivor down.
@@ -101,18 +93,59 @@ class TurnManager {
 
                 }
                 break;
-            case 'space': //Attempt to attack in the direction the survivor is facing.
+            case ' ': //Attempt to attack in the direction the survivor is facing.
+                if (this.survivor.getFacingRight()) {
+                    setTimeout(test, 350);
+                    this.survivor.setState('attackRight');
+                    var that = this;
+                    function test() {
+                        that.survivor.setState('idleRight');
+                        that.resolvePlayerAttacks();
+                    }
+                } else {
+                    setTimeout(temp, 350);
+                    this.survivor.setState('attackLeft');
+                    var that = this;
+                    function temp() {
+                        that.survivor.setState('idleLeft');
+                        that.resolvePlayerAttacks();
+                    }
+                }
+                //this.survivor.setState('idleRight');
                 break;
             default:
                 console.log("Not a valid key.");
                 break;
         }
+    }
 
 
-        
+    //Resolves the player's attacks.
+    resolvePlayerAttacks() {
+        //Populate an array with the tiles the player will be attacking.
+        var affectedTiles = [];
+        var surTile = this.survivor.getCurrentTile();
+        var upTile = this.gameboard.findTile(surTile.getTileX(), surTile.getTileY() - 1);
+        var downTile = this.gameboard.findTile(surTile.getTileX(), surTile.getTileY() + 1);
 
+        affectedTiles.push(surTile, upTile, downTile);
+
+        if (this.survivor.getFacingRight()) {
+            var rightTile = this.gameboard.findTile(surTile.getTileX() + 1, surTile.getTileY());
+            affectedTiles.push(rightTile);
+        } else {
+            var leftTile = this.gameboard.findTile(surTile.getTileX() - 1, surTile.getTileY());
+            affectedTiles.push(leftTile);
+        };
+
+        for (let val of affectedTiles) {
+            val.takeDamage();
+        }
 
     }
+
+
+
 
     enemyAction() {
         //TODO

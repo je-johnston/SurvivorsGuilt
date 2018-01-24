@@ -80,6 +80,26 @@ class Tile extends Entity {
         return this.isPassable;
     }
 
+
+
+    //Have the tile take damage, if possible.
+    takeDamage() {
+       
+        //If the tile can be damaged:
+        if (this.isDamageable === true) {
+            console.log("Tile at: " + this.getTileX() + "," + this.getTileY() + " Is Taking Damage.");
+            //If the tile has not already taken damage:
+            if (this.isDamaged === false) {
+                console.log("debug check");
+                this.isDamaged = true;
+            } else { //If it has already been damaged, replace with a dirt tile.
+                this.setType('dirt');
+            }
+
+        }
+    }
+
+
     update() {
         //Shouldn't be needed.
     }
@@ -138,7 +158,7 @@ class Tile extends Entity {
             case 'thorns':
                 this.isPassable = false;
                 this.isDamageable = true;
-                this.hasBeenDamaged = false;
+                this.isDamaged = false;
                 this.isExitTile = false;
                 var randNum = Math.floor((Math.random() * 5) + 1);
                 switch (randNum) {
@@ -202,11 +222,24 @@ class Tile extends Entity {
 
 
     draw() {
-        if (this.isDamageable === false || this.hasBeenDamaged === false) {
-        this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
-        } else {
+
+
+        if (this.isDamageable === false) {
+            this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
+        } else if (this.isDamageable === true && this.isDamaged == false) {
+            this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
+        } else if (this.isDamageable === true && this.isDamaged === true) {
             this.ctx.drawImage(this.spritesheet, this.dmgSheetX, this.dmgSheetY, 32, 32, this.x, this.y, 64, 64);
+        } else {
+            
         }
+
+
+        //if (this.isDamageable === false && this.isDamaged === false) {
+        //this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
+        //} else {
+        //    this.ctx.drawImage(this.spritesheet, this.dmgSheetX, this.dmgSheetY, 32, 32, this.x, this.y, 64, 64);
+        //}
 
     }
 

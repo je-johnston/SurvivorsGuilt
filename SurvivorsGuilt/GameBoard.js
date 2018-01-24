@@ -1,7 +1,7 @@
 ﻿
 class GameBoard {
 
-    constructor(gameEngine, startingX, startingY, boardWidth, boardHeight, numThorns) {
+    constructor(gameEngine, startingX, startingY, boardWidth, boardHeight, numThorns, numWalls) {
 
         this.gameEngine = gameEngine;
         this.boardWidth = boardWidth;
@@ -9,6 +9,7 @@ class GameBoard {
         this.startingX = startingX;
         this.startingY = startingY;
         this.numThorns = numThorns;
+        this.numWalls = numWalls;
         var asset = AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png");
 
         
@@ -42,7 +43,7 @@ class GameBoard {
         }
 
 
-        //Place a number of obstacle tiles around the map.
+        //Place a number of thorn tiles around the map.
         while (numThorns > 0) {
 
 
@@ -53,11 +54,27 @@ class GameBoard {
 
             if (tempTile.getType() != "dirt") {
                 continue; 
-                
             }
-
+            
             tempTile.setType("thorns"); 
             numThorns--;
+        }
+
+        while (numWalls > 0) {
+
+
+            var randX = this.getRand(2, (this.boardWidth - 3));
+            var randY = this.getRand(2, (this.boardHeight - 3));
+
+            var tempTile = myBoard[randX][randY];
+
+            if (tempTile.getType() != "dirt") {
+                continue;
+            }
+
+
+            tempTile.setType("wall");
+            numWalls--;
         }
 
 
