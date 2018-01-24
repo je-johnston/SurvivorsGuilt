@@ -68,6 +68,7 @@
     <Content Include="main.js" />
     <Content Include="Survivor.js" />
     <Content Include="Tile.js" />
+    <Content Include="TurnManager.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

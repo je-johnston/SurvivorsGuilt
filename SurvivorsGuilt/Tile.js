@@ -28,7 +28,11 @@ class Tile extends Entity {
         var isDamageable;
         //Whether the tile has *already* been damaged.
         var isDamaged;
-        
+        //Whether the tile is the 'exit' tile.
+        var isExit;
+
+
+
         this.findTileType(type);
 
         //this.render();
@@ -56,6 +60,9 @@ class Tile extends Entity {
         return this.tileY;
     }
 
+    isExitTile() {
+        return this.isExitTile;
+    }
 
     getType() {
         return this.type;
@@ -69,6 +76,10 @@ class Tile extends Entity {
         return this.isDamaged;
     }
 
+    canBePassed() {
+        return this.isPassable;
+    }
+
     update() {
         //Shouldn't be needed.
     }
@@ -77,9 +88,9 @@ class Tile extends Entity {
     findTileType(theType) {
         switch (theType) {
             case 'dirt':
-                console.log("Choosing a Random Dirt Tile.");
                 this.isDamageable = false;
                 this.isPassable = true;
+                this.isExitTile = false;
                 var randNum = Math.floor((Math.random() * 5) + 1);
                 switch (randNum) {
                     case 1:
@@ -107,9 +118,9 @@ class Tile extends Entity {
                 }
                 break;
             case 'wall':
-                console.log("Choosing a Random Wall Tile.");
                 this.isPassable = false;
                 this.isDamageable = false;
+                this.isExitTile = false;
                 var randNum = Math.floor((Math.random() * 2) + 1);
                 switch (randNum) {
                     case 1:
@@ -125,10 +136,10 @@ class Tile extends Entity {
                 }
                 break;
             case 'thorns':
-                console.log("Choosing a Random Thorn Tile.");
                 this.isPassable = false;
                 this.isDamageable = true;
                 this.hasBeenDamaged = false;
+                this.isExitTile = false;
                 var randNum = Math.floor((Math.random() * 5) + 1);
                 switch (randNum) {
                     case 1:
@@ -164,6 +175,14 @@ class Tile extends Entity {
                     default:
                         break;
                 }
+                break;
+            case 'exit':
+                this.isPassable = true;
+                this.isExitTile = true;
+                this.isDamageable = false;
+                this.hasBeenDamaged = false;
+                this.sheetX = 128;
+                this.sheetY = 64;
                 break;
             default:
                 console.log("ERROR, Debug Immediately");

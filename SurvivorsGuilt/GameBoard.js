@@ -30,6 +30,10 @@ class GameBoard {
                 if (i === 0 || j === 0 || i === (this.boardWidth - 1) || j === (this.boardHeight - 1)) {
                     tileType = "wall";
                 }
+                //Place the exit tile in the top right corner.
+                if (i === (this.boardWidth - 2) && j === 1) {
+                    tileType = 'exit';
+                }
 
                 var tile = new Tile(gameEngine, asset, this.startingX + (i*64), this.startingY+(j*64), i, j, tileType);
                 myBoard[i][j] = tile;
