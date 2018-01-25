@@ -12,16 +12,14 @@ class Zombie extends Entity {
         this.isFacingRight = true;
         this.setState('idleLeft');
 
-
-
         game.addEntity(this);
 
     }
 
-    //Moves the survivor.
+    //Moves the Zombie.
     setTile(t) {
 
-        console.log("Moving Survivor to Tile: " + t.getTileX() + "," + t.getTileY());
+        console.log("Moving Zombie to Tile: " + t.getTileX() + "," + t.getTileY());
 
         this.x = t.getX();
         this.y = t.getY();
@@ -32,7 +30,7 @@ class Zombie extends Entity {
         return this.isFacingRight;
     }
 
-    //Sets the current state of the Survivor.
+    //Sets the current state of the Zombie.
     setState(st) {
         this.state = st;
 
@@ -42,7 +40,7 @@ class Zombie extends Entity {
                 this.isFacingRight = true;
                 break;
             case 'idleLeft':
-                this.Animation = new Animation(this.sp1, 190, 0, 32, 32, .25, 6, true, false);
+                this.Animation = new Animation(this.sp1, 192, 0, 32, 32, .25, 6, true, true);
                 this.isFacingRight = false;
                 break;
             case 'attackLeft':
@@ -70,7 +68,7 @@ class Zombie extends Entity {
 
     }
 
-    //Gets the current state of the Survivor.
+    //Gets the current state of the Zombie.
     getState() {
         return this.state;
     }

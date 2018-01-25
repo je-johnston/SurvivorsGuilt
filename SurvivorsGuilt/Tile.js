@@ -195,6 +195,12 @@ class Tile extends Entity {
                     default:
                         break;
                 }
+                //Test Code to put damaged thorns in the level.
+                var thornTest = Math.floor((Math.random() * 5) + 1);
+                if (thornTest === 3) {
+                    this.isDamaged = true;
+                }
+
                 break;
             case 'exit':
                 this.isPassable = true;
