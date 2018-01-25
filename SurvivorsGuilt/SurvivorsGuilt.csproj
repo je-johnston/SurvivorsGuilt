@@ -70,6 +70,7 @@
     <Content Include="Tile.js" />
     <Content Include="TurnManager.js" />
     <Content Include="Web.config" />
+    <Content Include="Zombie.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,6 +17,9 @@ class GameManager {
         //Create the survivor and place him in the level.
         var surv = new Survivor(gameEngine, sheetOne, sheetTwo, gb.findTile(1,8));
 
+        //Create a zombie.
+        var zOne = new Zombie(gameEngine, sheetOne, sheetTwo, gb.findTile(8, 2));
+
         //Create the Turn Manager.
         var tm = new TurnManager(surv, gb);
 
