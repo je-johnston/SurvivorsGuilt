@@ -1,4 +1,4 @@
-﻿//Game Manager class handles object / game entity instantiation.
+﻿//Game Manager class handles UI and level creation.
 class GameManager {
     constructor() {
         console.log("Game Manager Created.");
@@ -11,22 +11,31 @@ class GameManager {
         var sheetOne = AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png");
         var sheetTwo = AM.getAsset("./Assets/img/Scavengers_SpriteSheet_2.png");
 
-        //Create the game board.
-        var gb = new GameBoard(gameEngine, 75, 75, 10, 10, 6, 4);
+        var currentLevNum = 1;
 
-        //Create the survivor and place him in the level.
-        var surv = new Survivor(gameEngine, sheetOne, sheetTwo, gb.findTile(1,8));
+        var playerHealth = 100;
+        var playerFood = 100;
 
-        //Create a zombie.
-        var zOne = new Zombie(gameEngine, sheetOne, sheetTwo, gb.findTile(8, 2));
+        //Create level (temp/debug)
+        var lvl = new Level(currentLevNum, gameEngine, sheetOne, sheetTwo, this, gameEngine);
 
-        //Create the Turn Manager.
-        var tm = new TurnManager(surv, gb);
+        document.getElementById("health").innerHTML = playerHealth;
+        document.getElementById("food").innerHTML = playerFood;
 
+        this.removeAll = function () {
+            //gameEngine.clearEntities();
+            //this.lvl = new Level(currentLevNum, gameEngine, sheetOne, sheetTwo, this);
+        };
+        
 
     }
 
+    createNextLevel() {
+        console.log("GM: Creating next level");
+        this.removeAll();
+        
 
+    }
 
 
     

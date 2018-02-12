@@ -14,14 +14,21 @@
     <script type="text/javascript" src="./Tile.js"></script>
     <script type="text/javascript" src="./animation.js"></script>
     <script type="text/javascript" src="./TurnManager.js"></script>
+    <script type="text/javascript" src="./level.js"></script>
     <script type="text/javascript" src="./GameBoard.js"></script>
     <script type="text/javascript" src="./GameManager.js"></script>
    
+    
 
 </head>
-<body>
+<body bgcolor ="black">
     <canvas id="gameWorld" tabindex="1" width="800" height="800" style="border: 1px solid black; background: black"></canvas>
 
+    <p id="healthElement" style="color: red; position: absolute; top: 200px; left: 750px;">Health: 
+    <span id="health"></span></p>
+    <p id="foodElement" style="color: green; position: absolute; top: 240px; left: 750px;">Food: 
+     <span id="food"></span></p>
     
+
 </body>
 </html>

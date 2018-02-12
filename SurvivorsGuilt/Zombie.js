@@ -10,7 +10,7 @@ class Zombie extends Entity {
         this.sp2 = sp2;
 
         this.isFacingRight = true;
-        this.setState('idleLeft');
+        this.setState('idleRight');
 
         game.addEntity(this);
 
@@ -36,7 +36,7 @@ class Zombie extends Entity {
 
         switch (this.state) {
             case 'idleRight':
-                this.Animation = new Animation(this.sp1, 0, 0, 32, 32, .25, 6, true, false);
+                this.Animation = new Animation(this.sp2, 128, 32, 32, 32, .25, 4, true, false);
                 this.isFacingRight = true;
                 break;
             case 'idleLeft':

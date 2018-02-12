@@ -65,6 +65,7 @@
     <Content Include="gameengine.js" />
     <Content Include="GameManager.js" />
     <Content Include="index.html" />
+    <Content Include="level.js" />
     <Content Include="main.js" />
     <Content Include="Survivor.js" />
     <Content Include="Tile.js" />

@@ -1,5 +1,5 @@
 ﻿
-class GameBoard {
+class GameBoard  {
 
     constructor(gameEngine, startingX, startingY, boardWidth, boardHeight, numThorns, numWalls) {
 

@@ -38,6 +38,11 @@ GameEngine.prototype.addEntity = function (entity) {
     this.entities.push(entity);
 }
 
+GameEngine.prototype.clearEntities = function () {
+    console.log("clearing entities");
+    this.entities.length = 0;
+}
+
 GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.ctx.save();

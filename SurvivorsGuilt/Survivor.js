@@ -84,6 +84,9 @@ class Survivor extends Entity {
         return this.tile;
     }
 
+
+
+
     //Draws the survivor - Inherited from code from instructor.
     draw() {
         this.Animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
