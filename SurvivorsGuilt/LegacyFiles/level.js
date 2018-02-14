@@ -14,7 +14,7 @@ class Level {
         //Create the survivor and place him in the level.
         var surv = new Survivor(gmengine, sheetOne, sheetTwo, gb.findTile(1,8));
 
-        //Create an array zombies.
+        //Create an array of zombies.
         var zombies = [];
         var zOne = new Zombie(gmengine, sheetOne, sheetTwo, gb.findTile(8, 2));
         zombies.push(zOne);
@@ -22,8 +22,6 @@ class Level {
 
         //Create the Turn Manager.
         var tm = new TurnManager(surv, gb, zombies, gameMan);
-
-        
 
         console.log("Level: " + levNum + " Created.");
 

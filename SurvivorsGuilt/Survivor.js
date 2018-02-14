@@ -9,27 +9,25 @@ class Survivor extends Entity {
         this.Animation = new Animation(sp1, 0, 0, 32, 32, .25, 6, true, false);
         this.ctx = game.ctx;
         this.tile = tile;
-        this.setTile(tile);
+        this.isAlive = true;
+        this.moveChar(tile);
         this.sp1 = sp1;
         this.sp2 = sp2;
-
         this.isFacingRight = true;
         this.setState('idleRight');
         
-
-
         game.addEntity(this);
 
     }
 
     //Moves the survivor.
-    setTile(t) {
-
-        console.log("Moving Survivor to Tile: " + t.getTileX() + "," + t.getTileY());
-
-        this.x = t.getX();
-        this.y = t.getY();
-        this.tile = t;
+    moveChar(t) {
+        if (this.isAlive) {
+            console.log("Moving Survivor to Tile: " + t.getTileX() + "," + t.getTileY());
+            this.x = t.getX();
+            this.y = t.getY();
+            this.tile = t;
+        }
     }
 
     getFacingRight() {
@@ -59,11 +57,11 @@ class Survivor extends Entity {
                 this.isFacingRight = true;
                 break;
             case 'damageLeft':
-
+                this.Animation = new Animation(this.sp2, 0, 160, 32, 32, .25, 2, false, false);
                 this.isFacingRight = false;
                 break;
             case 'damageRight':
-
+                this.Animation = new Animation(this.sp1, 192, 160, 32, 32, .25, 2, false, false);
                 this.isFacingRight = true;
                 break;
             default:
@@ -84,13 +82,24 @@ class Survivor extends Entity {
         return this.tile;
     }
 
+    //Disables rendering the player.
+    die() {
+        this.isAlive = false;
+        console.log('%c PLAYER DIED', 'color: red');
+    }
+
+    //Gets the player's status.
+    isPlayerAlive() {
+        return this.isAlive;
+    }
 
 
-
-    //Draws the survivor - Inherited from code from instructor.
+    //Draws the survivor.
     draw() {
-        this.Animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-        Entity.prototype.draw.call(this);
+        if (this.isAlive) {
+            this.Animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+            Entity.prototype.draw.call(this);
+        }
     }
 
     //Not needed.

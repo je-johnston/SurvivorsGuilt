@@ -12,10 +12,6 @@ class GameBoard  {
         this.numWalls = numWalls;
         var asset = AM.getAsset("./Assets/img/Scavengers_SpriteSheet.png");
 
-        
-
-
-
         //Create a 2D array representing the game board.
         var myBoard = [];
         for (var i = 0; i < boardWidth; i++) {
@@ -62,7 +58,6 @@ class GameBoard  {
 
         while (numWalls > 0) {
 
-
             var randX = this.getRand(2, (this.boardWidth - 3));
             var randY = this.getRand(2, (this.boardHeight - 3));
 
@@ -71,7 +66,6 @@ class GameBoard  {
             if (tempTile.getType() != "dirt") {
                 continue;
             }
-
 
             tempTile.setType("wall");
             numWalls--;
@@ -92,8 +86,6 @@ class GameBoard  {
 
         
     }
-
-
 
         getRand(min, max) {
             min = Math.ceil(min);

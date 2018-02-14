@@ -35,7 +35,7 @@ class Tile extends Entity {
 
         this.findTileType(type);
 
-        //this.render();
+        this.game.addEntity(this);
         console.log(type + " Tile at (" + this.tileX + "," + this.tileY + ")"+ " created at canvas position X = " + x + " Y = " + y);
     }
 
@@ -220,12 +220,6 @@ class Tile extends Entity {
 
     }
 
-    //render() {
-    //    console.log("Rendering Tile");
-    //    this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
-    //}
-
-
 
     draw() {
 
@@ -239,14 +233,6 @@ class Tile extends Entity {
         } else {
             
         }
-
-
-        //if (this.isDamageable === false && this.isDamaged === false) {
-        //this.ctx.drawImage(this.spritesheet, this.sheetX, this.sheetY, 32, 32, this.x, this.y, 64, 64);
-        //} else {
-        //    this.ctx.drawImage(this.spritesheet, this.dmgSheetX, this.dmgSheetY, 32, 32, this.x, this.y, 64, 64);
-        //}
-
     }
 
 }

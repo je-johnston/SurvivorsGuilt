@@ -21,11 +21,7 @@ AM.queueDownload("./Assets/img/Scavengers_SpriteSheet.png");
 AM.queueDownload("./Assets/img/Scavengers_SpriteSheet_2.png");
 
 AM.downloadAll(function () {
-
-    var gm = new GameManager();
-
-    
-
-
+    //var gm = new GameManager();
+    var dm = new DungeonMaster();
     console.log("All Done!");
 });

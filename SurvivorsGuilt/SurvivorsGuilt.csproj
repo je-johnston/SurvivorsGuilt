@@ -60,16 +60,17 @@
   <ItemGroup>
     <Content Include="animation.js" />
     <Content Include="assetmanager.js" />
+    <Content Include="DungeonMaster.js" />
     <Content Include="Entity.js" />
-    <Content Include="GameBoard.js" />
+    <Content Include="LegacyFiles\GameBoard.js" />
     <Content Include="gameengine.js" />
-    <Content Include="GameManager.js" />
+    <Content Include="LegacyFiles\GameManager.js" />
     <Content Include="index.html" />
-    <Content Include="level.js" />
+    <Content Include="LegacyFiles\level.js" />
     <Content Include="main.js" />
     <Content Include="Survivor.js" />
     <Content Include="Tile.js" />
-    <Content Include="TurnManager.js" />
+    <Content Include="LegacyFiles\TurnManager.js" />
     <Content Include="Web.config" />
     <Content Include="Zombie.js" />
   </ItemGroup>
