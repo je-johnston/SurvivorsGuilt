@@ -62,6 +62,7 @@
     <Content Include="assetmanager.js" />
     <Content Include="DungeonMaster.js" />
     <Content Include="Entity.js" />
+    <Content Include="Food.js" />
     <Content Include="LegacyFiles\GameBoard.js" />
     <Content Include="gameengine.js" />
     <Content Include="LegacyFiles\GameManager.js" />

@@ -37,7 +37,8 @@ class DungeonMaster {
         this.maxHealth = 100; //Maximum amount of player health.
         this.currPlayerHealth = 100; //Current player health.
         this.maxFood = 200; //Maximum amount of food a player can carry.
-        this.playerFood = 50; //Current amount of player food.
+        this.playerFood = 75; //Current amount of player food.
+        this.foodValue = 35; //Amount of food gained when picked up.
         this.actionCost = 5; //The cost (in food) of a given player action (move or attack).
         this.exitX = 8; //Exit X value.
         this.exitY = 1; //Exit Y value.
@@ -49,7 +50,6 @@ class DungeonMaster {
         Arrays containing active(/alive) zombies and dead/inactive ones.
         */
         this.activeZombies = [];
-        this.deadZombies = [];
         this.normZombDmg = 25; //How much damage a normal zombie does.
         this.supZombDmg = 35; //How much damage a super zombie does.
         
@@ -61,19 +61,32 @@ class DungeonMaster {
         this.inputAccepted = true; //Whether user input is accepted or not.
         this.validKeys = ['a', 's', 'w', 'd', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', ' '];
 
+
         /*
         Begin the game. 
         */
         this.populateGameBoard(gameEngine, sheetOne);
         this.Survivor = new Survivor(gameEngine, sheetOne, sheetTwo, this.gameBoard[this.playerStartX][this.playerStartY]);
-        //Create 3 Super and 3 Regular zombies and place them in the dead zombie array.
-        for (i = 0; i < 1; i++) {
-            var regZombie = new Zombie(gameEngine, sheetOne, sheetTwo, this.gameBoard[7][1], true, false);
+        //Create 3 Super and 3 Regular zombies and place them in the array as dead.
+        for (i = 0; i < 6; i++) {
+            var regZombie = new Zombie(gameEngine, sheetOne, sheetTwo, this.gameBoard[7][1], false, false);
             this.activeZombies.push(regZombie);
             //add super zombies
         }
 
+      /*
+      Create an array of food.
+      */
+        this.foodStock = [];
+        for (var i = 0; i < 6; i++) {
+            var yums = new Food(gameEngine, sheetOne, this.gameBoard[5][1]);
+            this.foodStock.push(yums);
+        }
 
+
+        this.placeZombies(1);
+        this.placeFood(3);
+        var foodTest = new Food(gameEngine, sheetOne, this.gameBoard[7][1]);
         this.updateUI();
         this.addListeners();
 
@@ -88,8 +101,10 @@ class DungeonMaster {
         this.resetGameBoard();//Remove all current obstacles.
         this.generateObstacles(8, 8);//Re-generate obstacles.
         this.placeExit(this.exitX, this.exitY); //Re-generate exit tile.
-        //Re-add zombies.
+        this.placeFood(3); //Re-add food.
+        this.placeZombies(2); //Re-add zombies.
         this.Survivor.moveChar(this.gameBoard[this.playerStartX][this.playerStartY]);//Place survivor in starting square.
+        this.updateUI(); //Update the UI.
         this.inputAccepted = true;
         
     }
@@ -99,14 +114,92 @@ class DungeonMaster {
     */
     endLevel() {
         this.inputAccepted = false; //Disable input.
-       
-
+        //Kill all zombies currently active.
+        for (const z of this.activeZombies) {
+            if (z.isZombieAlive()) {
+                this.killZombie(z);
+            }
+        }
+        //Remove all food.
+        this.disableFood();
 
     }
 
+    /*
+    Places a number of food tiles across the level.
+    */
+    placeFood(fnum) {
+        for (var i = 0; i < fnum; i++) {
+            this.foodStock[i].setActive(true);
+        }
+
+        for (const f of this.foodStock) {
+            if (f.getActive()) {
+                while (true) {
+                    var randX = this.getRand(2, 8);
+                    var randY = this.getRand(1, 8);
+                    if (this.gameBoard[randX][randY].getType() == 'dirt') {
+                        f.moveChar(this.gameBoard[randX][randY]);
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
+     * Checks to see if the survivor has entered a food space. If it has, picks up the food and adds it to total.
+     */
+    pickUpFood() {
+        var surTile = this.Survivor.getCurrentTile();
+        for (const f of this.foodStock) {
+            if (surTile === f.getTile() && f.getActive()) {
+                f.setActive(false);
+                this.playerFood += this.foodValue;
+            }
+        }
+    }
+
+
+    /**
+     * Disables all food.
+     */
+    disableFood() {
+        for (const f of this.foodStock) {
+            if (f.getActive()) {
+                f.setActive(false);
+            }
+        }
+
+    }
+
+    /**
+     * Checks the user for health and food values. If less than 0, trigger game over.
+     */
+    checkHealthAndFood() {
+        if (this.currPlayerHealth <= 0 || this.playerFood <= 0) {
+            this.gameOver();
+        }
+    }
+
+    /**
+     * Game over. Sends up popup window.
+     */
+    gameOver() {
+        alert("Game Over!");
+    }
+
+
+
+    /*
+    Updates the UI periodically.
+    */
     updateUI() {
         document.getElementById("health").innerHTML = this.currPlayerHealth;
         document.getElementById("food").innerHTML = this.playerFood;
+        document.getElementById("turn").innerHTML = this.turnNum;
+        document.getElementById("lvl").innerHTML = this.currentLevel;
     }
 
     /*
@@ -117,12 +210,11 @@ class DungeonMaster {
         this.turnNum++; //Increment the turn number.
         this.playerTurn(keyPressed); //Resolve the player's actions.
         }
+        this.pickUpFood();//Check to see if the player has picked anything up. If he has, add it to total.
         this.inputAccepted = false;//Turn off input until all other actions are resolved.
         this.enemyTurn() //Resolve the zombie's actions.
         this.updateUI(); //Update the UI.
-        //Check to see if the player is still alive and has food.
-        //Check to see if the player has picked anything up. If he has, add it to total.
-
+        this.checkHealthAndFood();
         if (this.checkForExit()) { //Check to see if the player has reached exit. If he has, create new level.
             this.endLevel();
             this.createLevel();
@@ -184,35 +276,37 @@ class DungeonMaster {
     enemyTurn() {
         //Iterate over each zombie.
         for (const z of this.activeZombies) {
+            //If the zombie is alive
+            if (z.isZombieAlive()) {
             //If the zombie is adjacent to the player
-            if (this.isSurvivorAdjacent(z)) {
-                //console.log("Survivor is adjacent to zombie.");
-                //Initiate attack.
-                if (z.getFacingRight() == true) {
-                    setTimeout(test, 350);
-                    z.setState('attackRight');
-                    
-                    var that = this;
-                    function test() {
-                        z.setState('idleRight');
-                        //that.survivorAttack();
-                    }
-                } else {
-                    console.log("test test test");
-                    setTimeout(temp, 350);
-                    z.setState('attackLeft');
-                    var that = this;
-                    function temp() {
-                        z.setState('idleLeft');
-                        //that.survivorAttack();
-                    }
-                }
+                if (this.isSurvivorAdjacent(z)) {
+                    //console.log("Survivor is adjacent to zombie.");
+                    //Initiate attack.
+                    if (z.getFacingRight() == true) {
+                        setTimeout(test, 350);
+                        z.setState('attackRight');
 
-                //Have the survivor take damage.
-                this.survivorDamage(this.normZombDmg);
-            } else {
-                //Move towards the survivor.
-                this.moveZombie(z);
+                        var that = this;
+                        function test() {
+                            z.setState('idleRight');
+                            //that.survivorAttack();
+                        }
+                    } else {
+                        setTimeout(temp, 350);
+                        z.setState('attackLeft');
+                        var that = this;
+                        function temp() {
+                            z.setState('idleLeft');
+                            //that.survivorAttack();
+                        }
+                    }
+
+                    //Have the survivor take damage.
+                    this.survivorDamage(this.normZombDmg);
+                } else {
+                    //Move towards the survivor.
+                    this.moveZombie(z);
+                }
             }
         }
     }
@@ -347,7 +441,7 @@ class DungeonMaster {
         //Have all zombies that may be in those tiles take damage.
         for (const z of this.activeZombies) {
             for (const t of affectedTiles) {
-                if (z.getCurrentTile() == t) {
+                if (z.getCurrentTile() == t && z.isZombieAlive()) {
                     this.killZombie(z);
                 }
             }
@@ -366,13 +460,38 @@ class DungeonMaster {
 
 
     /*
-    Kills the zombie, disabling rendering/collisions and moving it into the dead zombie array.
+    Kills the zombie, disabling rendering/collisions.
     */
     killZombie(zomb) {
         zomb.die();
-        var zindex = this.activeZombies.indexOf(zomb);
-        var removedZombie = this.activeZombies.splice(zindex, 1);
-        this.deadZombies.push(zomb);
+    }
+
+    /*
+    Places a number of zombies in the map.
+    */
+    placeZombies(zNum) {
+
+        for (var i = 0; i < zNum; i++) {
+            this.activeZombies[i].activateZombie();
+        }
+
+        //Iterate over every live zombie and set it to a random tile.
+
+        for (const z of this.activeZombies) {
+            if (z.isZombieAlive()) {
+                while (true) {
+                    var randX = this.getRand(1, 8);
+                    var randY = this.getRand(1, 3);
+                    if (this.gameBoard[randX][randY].getType() == 'dirt') {
+                        z.moveChar(this.gameBoard[randX][randY]);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
     }
 
 
@@ -419,9 +538,9 @@ class DungeonMaster {
             result = false;
         }
 
-        //If the candidate tile contains an active zombie, it cannot be moved into.
+        //If the candidate tile contains an active, alive zombie, it cannot be moved into.
         for (const z of this.activeZombies) {
-            if (z.getCurrentTile() == candidateTile) {
+            if (z.getCurrentTile() == candidateTile && z.isZombieAlive()) {
                 result = false;
             }
         }

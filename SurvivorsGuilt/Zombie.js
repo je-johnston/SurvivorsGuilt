@@ -21,10 +21,12 @@ class Zombie extends Entity {
     }
 
     /*
-    If the zombie is damaged, heal it.
+    Reactivate dead zombie.
     */
-    healZombie() {
-        
+    activateZombie() {
+        this.isAlive = true;
+        this.isFacingRight = false;
+        this.setState('idleLeft');
     }
 
     //Moves the zombie.
@@ -87,7 +89,7 @@ class Zombie extends Entity {
     }
 
     //Gets the zombie's status.
-    isPlayerAlive() {
+    isZombieAlive() {
         return this.isAlive;
     }
 
