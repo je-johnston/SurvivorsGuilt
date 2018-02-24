@@ -16,10 +16,25 @@
     <script type="text/javascript" src="./Tile.js"></script>
     <script type="text/javascript" src="./animation.js"></script>
     
- 
+ <style>
+     @font-face{
+         font-family: gameOverFont;
+         src: "./Assets/Fonts/game_over.ttf";
+     }
+
+     body {
+         background-color: black;
+         
+     }
+
+     
+
+
+
+ </style>
 
 </head>
-<body bgcolor ="black">
+<body>
     <canvas id="gameWorld" tabindex="1" width="800" height="800" style="border: 1px solid black; background: black"></canvas>
 
     <p id="healthElement" style="color: red; position: absolute; top: 200px; left: 750px;">Health: 
@@ -30,8 +45,13 @@
         Turn:
         <span id="turn"></span> </p>
     <p id="lvlElement" style="color: white; position: absolute; top: 320px; left: 750px;">
-        Level: 
+        Level:
         <span id="lvl"></span>
+
+    <p id="scoreElement" style="color: yellow; position: absolute; top: 360px; left: 750px;">
+        Score:
+        <span id="scr"></span>
+
     </p>
     
 

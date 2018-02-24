@@ -37,13 +37,20 @@ class DungeonMaster {
         this.maxHealth = 100; //Maximum amount of player health.
         this.currPlayerHealth = 100; //Current player health.
         this.maxFood = 200; //Maximum amount of food a player can carry.
-        this.playerFood = 75; //Current amount of player food.
+        this.playerFood = 125; //Current amount of player food.
         this.foodValue = 35; //Amount of food gained when picked up.
         this.actionCost = 5; //The cost (in food) of a given player action (move or attack).
         this.exitX = 8; //Exit X value.
         this.exitY = 1; //Exit Y value.
         this.playerStartX = 1; //Player starting X.
         this.playerStartY = 8; //Player starting Y.
+        this.isGameOver = false; //Whether the game has ended. Turn will not start if this is set to true.
+
+        /*
+        Score variables.
+        */
+        this.playerScore = 0; //The player's current score.
+        
 
 
         /*
@@ -68,10 +75,12 @@ class DungeonMaster {
         this.populateGameBoard(gameEngine, sheetOne);
         this.Survivor = new Survivor(gameEngine, sheetOne, sheetTwo, this.gameBoard[this.playerStartX][this.playerStartY]);
         //Create 3 Super and 3 Regular zombies and place them in the array as dead.
-        for (i = 0; i < 6; i++) {
+        for (i = 0; i < 3; i++) {
             var regZombie = new Zombie(gameEngine, sheetOne, sheetTwo, this.gameBoard[7][1], false, false);
             this.activeZombies.push(regZombie);
             //add super zombies
+            var supZombie = new Zombie(gameEngine, sheetOne, sheetTwo, this.gameBoard[7][1], false, true);
+            this.activeZombies.push(supZombie);
         }
 
       /*
@@ -97,12 +106,15 @@ class DungeonMaster {
     */
     createLevel() {
         this.currentLevel++; //Increment the level number.
+
+        var difScale = this.scaleDificulty();
+
         this.turnNum = 1; //Reset the turn number.
         this.resetGameBoard();//Remove all current obstacles.
-        this.generateObstacles(8, 8);//Re-generate obstacles.
+        this.generateObstacles(difScale[0], difScale[1]);//Re-generate obstacles.
         this.placeExit(this.exitX, this.exitY); //Re-generate exit tile.
-        this.placeFood(3); //Re-add food.
-        this.placeZombies(2); //Re-add zombies.
+        this.placeFood(difScale[2]); //Re-add food.
+        this.placeZombies(difScale[3]); //Re-add zombies.
         this.Survivor.moveChar(this.gameBoard[this.playerStartX][this.playerStartY]);//Place survivor in starting square.
         this.updateUI(); //Update the UI.
         this.inputAccepted = true;
@@ -157,6 +169,7 @@ class DungeonMaster {
             if (surTile === f.getTile() && f.getActive()) {
                 f.setActive(false);
                 this.playerFood += this.foodValue;
+                this.playerScore += 10;
             }
         }
     }
@@ -187,7 +200,18 @@ class DungeonMaster {
      * Game over. Sends up popup window.
      */
     gameOver() {
-        alert("Game Over!");
+        this.inputAccepted = false;
+        this.isGameOver = true;
+        console.log("Game Over");
+        //alert("Game Over!");
+
+        var canvas = document.getElementById("gameWorld"); //Canvas element.
+        var ctx = canvas.getContext("2d"); //Context.
+        ctx.rect(0, 0, 400, 400);
+        //ctx.fillStyle = 'rgba(255,0,0,0.5)';
+        ctx.fill();
+
+
     }
 
 
@@ -200,13 +224,15 @@ class DungeonMaster {
         document.getElementById("food").innerHTML = this.playerFood;
         document.getElementById("turn").innerHTML = this.turnNum;
         document.getElementById("lvl").innerHTML = this.currentLevel;
+        document.getElementById("scr").innerHTML = this.playerScore;
+
     }
 
     /*
     The turn sequence. 
     */
     turn(keyPressed) {
-        if (this.inputAccepted) {
+        if (this.inputAccepted && !this.isGameOver) {
         this.turnNum++; //Increment the turn number.
         this.playerTurn(keyPressed); //Resolve the player's actions.
         }
@@ -265,6 +291,9 @@ class DungeonMaster {
             default:
                 console.log("Debug playerTurn");
         }
+
+        //Add score.
+        this.playerScore += (5 * (this.currentLevel));
 
         //Deduct food from player's total.
         this.playerFood -= this.actionCost;
@@ -329,10 +358,6 @@ class DungeonMaster {
         var isLeft = (xDelta < 0); //Whether the survivor is to the left or right of the zombie.
         var isEvenHor = (yDelta == 0); //Whether the survivor is even on the horizontal plane with the zombie.
         var isEvenVert = (xDelta == 0); //Whether the survivor is even on the veritcal plane with the zombie.
-
-
-        //console.log("xDelta = " + xDelta, " yDelta = " + yDelta + " isAbove = " + isAbove + " isLeft = " + isLeft);
-        //console.log("isEvenHorizontal = " + isEvenHor + " isEvenVert = " + isEvenVert);
 
         //Populate the directions array.
         if (isEvenHor) {
@@ -441,8 +466,10 @@ class DungeonMaster {
         //Have all zombies that may be in those tiles take damage.
         for (const z of this.activeZombies) {
             for (const t of affectedTiles) {
-                if (z.getCurrentTile() == t && z.isZombieAlive()) {
+                if (z.getCurrentTile() == t && z.isZombieAlive() === true) {
                     this.killZombie(z);
+                    this.playerScore += 25;
+                    this.updateUI();
                 }
             }
         }
@@ -664,7 +691,7 @@ class DungeonMaster {
             const keyName = event.key;
             //If the key pressed is equal to a valid entry key, begin turn.
             for (const k of this.validKeys) {
-                if (keyName === k) {
+                if (keyName === k && this.isGameOver === false) {
                     this.turn(keyName);
                 }
             }
@@ -672,6 +699,51 @@ class DungeonMaster {
 
     }
 
+    /*
+    Simple difficulty scalar based on the current level number.
+    */
+    scaleDificulty() {
+
+        var result = []; //The result array.
+        var numThorns = 0; //The number of thorns in a level.
+        var numWalls = 0; //The number of wall objects in a level.
+        var numFoods = 0; //The number of food items in a level.
+        var numRegZombs = 0; //The number of regular zombies in a level.
+        //var numSupZombs = 0;
+
+        if (this.currentLevel <= 3) {
+
+            numThorns = this.getRand(2, 6);
+            numWalls = this.getRand(2, 4);
+            numFoods = 4;
+            numRegZombs = 1;
+
+        } else if (this.currentLevel >= 4 && this.currentLevel <= 8) {
+
+            numThorns = this.getRand(4, 7);
+            numWalls = this.getRand(3, 5);
+            numFoods = this.getRand(2, 3);
+            numRegZombs = 2;
+
+        } else {
+
+            numThorns = this.getRand(5, 9);
+            numWalls = this.getRand(4, 6);
+            numFoods = this.getRand(1, 2);
+            numRegZombs = this.getRand(2, 3);
+
+        }
+
+        result[0] = numThorns;
+        result[1] = numWalls;
+        result[2] = numFoods;
+        result[3] = numRegZombs;
+        //result[4] = numSupZombs;
+
+        return result;
+
+
+    }
 
 
 

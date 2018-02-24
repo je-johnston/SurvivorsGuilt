@@ -46,28 +46,49 @@ class Zombie extends Entity {
     //Sets the current state of the Zombie.
     setState(st) {
         this.state = st;
+        if (this.isSuperZombie === false) {
+            switch (this.state) {
+                case 'idleRight':
+                    this.Animation = new Animation(this.sp2, 128, 32, 32, 32, .25, 4, true, false);
+                    this.isFacingRight = true;
+                    break;
+                case 'idleLeft':
+                    this.Animation = new Animation(this.sp1, 192, 0, 32, 32, .25, 6, true, false);
+                    this.isFacingRight = false;
+                    break;
+                case 'attackLeft':
+                    this.Animation = new Animation(this.sp1, 64, 160, 32, 32, .25, 2, false, false);
+                    this.isFacingRight = false;
+                    break;
+                case 'attackRight':
+                    this.Animation = new Animation(this.sp2, 130, 160, 32, 32, .25, 2, true, true);
+                    this.isFacingRight = true;
+                    break;
+                default:
+                    break;
 
-        switch (this.state) {
-            case 'idleRight':
-                this.Animation = new Animation(this.sp2, 128, 32, 32, 32, .25, 4, true, false);
-                this.isFacingRight = true;
-                break;
-            case 'idleLeft':
-                this.Animation = new Animation(this.sp1, 192, 0, 32, 32, .25, 6, true, false);
-                this.isFacingRight = false;
-                break;
-            case 'attackLeft':
-                this.Animation = new Animation(this.sp1, 64, 160, 32, 32, .25, 2, false, false);
-                this.isFacingRight = false;
-                break;
-            case 'attackRight':
-                this.Animation = new Animation(this.sp2, 130, 160, 32, 32, .25, 2, true, true);
-                this.isFacingRight = true;
-                break;
-            default:
-                break;
-
-
+            }
+        } else { //Super zombie
+            switch (this.state) {
+                case 'idleRight':
+                    this.Animation = new Animation(this.sp2, 0, 32, 32, 32, .25, 4, true, false);
+                    this.isFacingRight = true;
+                    break;
+                case 'idleLeft':
+                    this.Animation = new Animation(this.sp1, 128, 32, 32, 32, .25, 4, true, false);
+                    this.isFacingRight = false;
+                    break;
+                case 'attackLeft':
+                    this.Animation = new Animation(this.sp1, 128, 160, 32, 32, .25, 2, false, false);
+                    this.isFacingRight = false;
+                    break;
+                case 'attackRight':
+                    this.Animation = new Animation(this.sp2, 64, 160, 32, 32, .25, 2, true, true);
+                    this.isFacingRight = true;
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
