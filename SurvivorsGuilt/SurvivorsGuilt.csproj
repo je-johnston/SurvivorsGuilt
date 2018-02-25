@@ -60,6 +60,7 @@
   <ItemGroup>
     <Content Include="animation.js" />
     <Content Include="assetmanager.js" />
+    <Content Include="Assets\Audio\scavengers_music.aif" />
     <Content Include="DungeonMaster.js" />
     <Content Include="Entity.js" />
     <Content Include="Food.js" />
@@ -80,6 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Fonts\game_over.ttf" />
+    <Content Include="Assets\Fonts\game_over.woff" />
+    <Content Include="Assets\Fonts\ARCADECLASSIC.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

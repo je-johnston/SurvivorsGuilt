@@ -13,6 +13,8 @@ class Tile extends Entity {
         this.tileX = tileX;
         this.tileY = tileY;
         this.type = type;
+  
+
 
         //The X and Y Coordinates of this tile on the sprite sheet. 128 is the default value.
         var sheetX = 128;

@@ -37,20 +37,20 @@ class DungeonMaster {
         this.maxHealth = 100; //Maximum amount of player health.
         this.currPlayerHealth = 100; //Current player health.
         this.maxFood = 200; //Maximum amount of food a player can carry.
-        this.playerFood = 125; //Current amount of player food.
-        this.foodValue = 35; //Amount of food gained when picked up.
+        this.playerFood = 200; //Current amount of player food.
+        this.foodValue = 40; //Amount of food gained when picked up.
         this.actionCost = 5; //The cost (in food) of a given player action (move or attack).
         this.exitX = 8; //Exit X value.
         this.exitY = 1; //Exit Y value.
         this.playerStartX = 1; //Player starting X.
         this.playerStartY = 8; //Player starting Y.
         this.isGameOver = false; //Whether the game has ended. Turn will not start if this is set to true.
+        this.lowHealth = false; //Whether the player has low health or not.
 
         /*
         Score variables.
         */
         this.playerScore = 0; //The player's current score.
-        
 
 
         /*
@@ -58,7 +58,7 @@ class DungeonMaster {
         */
         this.activeZombies = [];
         this.normZombDmg = 25; //How much damage a normal zombie does.
-        this.supZombDmg = 35; //How much damage a super zombie does.
+        this.supZombDmg = 50; //How much damage a super zombie does.
         
 
         /*
@@ -93,11 +93,13 @@ class DungeonMaster {
         }
 
 
-        this.placeZombies(1);
+        this.placeZombies(1, 0);
         this.placeFood(3);
         var foodTest = new Food(gameEngine, sheetOne, this.gameBoard[7][1]);
         this.updateUI();
         this.addListeners();
+
+
 
     }
 
@@ -114,7 +116,7 @@ class DungeonMaster {
         this.generateObstacles(difScale[0], difScale[1]);//Re-generate obstacles.
         this.placeExit(this.exitX, this.exitY); //Re-generate exit tile.
         this.placeFood(difScale[2]); //Re-add food.
-        this.placeZombies(difScale[3]); //Re-add zombies.
+        this.placeZombies(difScale[3], difScale[4]); //Re-add zombies.
         this.Survivor.moveChar(this.gameBoard[this.playerStartX][this.playerStartY]);//Place survivor in starting square.
         this.updateUI(); //Update the UI.
         this.inputAccepted = true;
@@ -191,26 +193,32 @@ class DungeonMaster {
      * Checks the user for health and food values. If less than 0, trigger game over.
      */
     checkHealthAndFood() {
+
+
         if (this.currPlayerHealth <= 0 || this.playerFood <= 0) {
             this.gameOver();
         }
+
+        if (this.currPlayerHealth <= 25) {
+            this.startBlink("healthElement");
+            this.lowHealth = true;
+        }
+
     }
 
     /**
-     * Game over. Sends up popup window.
+     * Game over.
      */
     gameOver() {
+
         this.inputAccepted = false;
         this.isGameOver = true;
+        this.currPlayerHealth = 0;
         console.log("Game Over");
-        //alert("Game Over!");
-
-        var canvas = document.getElementById("gameWorld"); //Canvas element.
-        var ctx = canvas.getContext("2d"); //Context.
-        ctx.rect(0, 0, 400, 400);
-        //ctx.fillStyle = 'rgba(255,0,0,0.5)';
-        ctx.fill();
-
+        this.updateUI();
+        this.Survivor.die();
+        
+        
 
     }
 
@@ -331,10 +339,27 @@ class DungeonMaster {
                     }
 
                     //Have the survivor take damage.
-                    this.survivorDamage(this.normZombDmg);
+                    //this.survivorDamage(this.normZombDmg);
+                    if (z.getIsSuper() === true) {
+                        this.survivorDamage(this.supZombDmg);
+                    } else {
+                        this.survivorDamage(this.normZombDmg);
+                    }
+
+
                 } else {
                     //Move towards the survivor.
                     this.moveZombie(z);
+                    //if (z.getIsSuper() === true) {
+                    //    this.moveZombie(z);
+                    //} else {
+                    //    if (this.turnNum % 2 === 0) {
+                    //        this.moveZombie(z);
+                    //    } else {
+                    //        //
+                    //    }
+                    //}
+
                 }
             }
         }
@@ -496,11 +521,25 @@ class DungeonMaster {
     /*
     Places a number of zombies in the map.
     */
-    placeZombies(zNum) {
+    placeZombies(regZoms, supZoms) {
 
-        for (var i = 0; i < zNum; i++) {
-            this.activeZombies[i].activateZombie();
+        var reg = regZoms;
+        var sup = supZoms;
+
+        for (const z of this.activeZombies) {
+            if (z.getIsSuper() == true && sup > 0) {
+                z.activateZombie();
+                sup--;
+            } 
+
+            if (z.getIsSuper() == false && reg > 0) {
+                z.activateZombie();
+                reg--;
+            }
+
         }
+
+
 
         //Iterate over every live zombie and set it to a random tile.
 
@@ -697,6 +736,16 @@ class DungeonMaster {
             }
         })
 
+        var that = this;
+
+        document.addEventListener("click", function (event) {
+
+            //var temp = document.getElementById('healthElement');
+            //setInterval(function () {
+            //    temp.style.display = (temp.style.display == 'none' ? '' : 'none');
+            //}, 1000);
+
+            }, false);
     }
 
     /*
@@ -709,7 +758,7 @@ class DungeonMaster {
         var numWalls = 0; //The number of wall objects in a level.
         var numFoods = 0; //The number of food items in a level.
         var numRegZombs = 0; //The number of regular zombies in a level.
-        //var numSupZombs = 0;
+        var numSupZombs = 0;
 
         if (this.currentLevel <= 3) {
 
@@ -717,6 +766,7 @@ class DungeonMaster {
             numWalls = this.getRand(2, 4);
             numFoods = 4;
             numRegZombs = 1;
+            numSupZombs = 0;
 
         } else if (this.currentLevel >= 4 && this.currentLevel <= 8) {
 
@@ -724,13 +774,20 @@ class DungeonMaster {
             numWalls = this.getRand(3, 5);
             numFoods = this.getRand(2, 3);
             numRegZombs = 2;
+            numSupZombs = this.getRand(0, 1);
 
-        } else {
-
+        } else if (this.currentLevel >= 9 && this.currentLevel <= 13) {
             numThorns = this.getRand(5, 9);
             numWalls = this.getRand(4, 6);
             numFoods = this.getRand(1, 2);
-            numRegZombs = this.getRand(2, 3);
+            numRegZombs = this.getRand(1, 2);
+            numSupZombs = this.getRand(1, 2);
+        } else {
+            numThorns = this.getRand(7, 9);
+            numWalls = this.getRand(6, 7);
+            numFoods = this.getRand(1, 2);
+            numRegZombs = this.getRand(1, 2);
+            numSupZombs = this.getRand(2, 4);
 
         }
 
@@ -738,13 +795,25 @@ class DungeonMaster {
         result[1] = numWalls;
         result[2] = numFoods;
         result[3] = numRegZombs;
-        //result[4] = numSupZombs;
+        result[4] = numSupZombs;
 
         return result;
 
-
     }
 
+    /*
+    Causes the passed in element to blink.
+    */
+    startBlink(domElem) {
+
+        if (this.lowHealth === false) { 
+
+        var elem = document.getElementById(domElem);
+        setInterval(function () {
+            elem.style.display = (elem.style.display == 'none' ? '' : 'none');
+        }, 750);
+    }
+    }
 
 
 

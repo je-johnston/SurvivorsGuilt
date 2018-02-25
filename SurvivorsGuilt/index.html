@@ -18,8 +18,8 @@
     
  <style>
      @font-face{
-         font-family: gameOverFont;
-         src: "./Assets/Fonts/game_over.ttf";
+         font-family: arcadeClassic;
+         src: url('Assets/Fonts/ARCADECLASSIC.woff') format('woff');
      }
 
      body {
@@ -27,33 +27,100 @@
          
      }
 
-     
 
 
+     #healthElement {
+         color: red;
+         font-size: 32px;
+         position: absolute;
+         top: 120px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+     #foodElement {
+         color: green;
+         font-size: 32px;
+         position: absolute;
+         top: 160px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+     #lvlElement {
+         color: yellow;
+         font-size: 32px;
+         position: absolute;
+         top: 200px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+     #turnElement {
+         color: blue;
+         font-size: 32px;
+         position: absolute;
+         top: 240px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+     #scoreElement {
+         color: white;
+         font-size: 32px;
+         position: absolute;
+         top: 280px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+
+     #gameTitleElement {
+         color: grey;
+         font-size: 48px;
+         position: absolute;
+         top: 40px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+
+     #controls {
+         color: white;
+         font-size: 24px;
+         position: absolute;
+         top: 385px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
+
+     #scoreInfo {
+         color: white;
+         font-size: 24px;
+         position: absolute;
+         top: 545px;
+         left: 750px;
+         font-family: arcadeClassic;
+     }
 
  </style>
 
 </head>
 <body>
-    <canvas id="gameWorld" tabindex="1" width="800" height="800" style="border: 1px solid black; background: black"></canvas>
 
-    <p id="healthElement" style="color: red; position: absolute; top: 200px; left: 750px;">Health: 
-    <span id="health"></span></p>
-    <p id="foodElement" style="color: green; position: absolute; top: 240px; left: 750px;">Food: 
-     <span id="food"></span></p>
-    <p id="turnElement" style="color: blue; position: absolute; top: 280px; left: 750px;">
-        Turn:
-        <span id="turn"></span> </p>
-    <p id="lvlElement" style="color: white; position: absolute; top: 320px; left: 750px;">
-        Level:
-        <span id="lvl"></span>
-
-    <p id="scoreElement" style="color: yellow; position: absolute; top: 360px; left: 750px;">
-        Score:
-        <span id="scr"></span>
-
-    </p>
     
+    <canvas id="gameWorld" tabindex="1" width="800" height="800" style="border: 1px solid black; background: black"></canvas>
+   
+    <p id="gameTitleElement"> SURVIVOR'S GUILT </p>
+
+
+        <p id="healthElement"> Health: <span id="health"></span></p>
+        <p id="foodElement">Food: <span id="food"></span> </p>
+        <p id="turnElement"> Turn: <span id="turn"></span> </p>
+        <p id="lvlElement"> Level: <span id="lvl"></span> </p>
+        <p id="scoreElement"> Score: <span id="scr"></span></p>
+        <p id="controls"> W = UP <br /> A  =  LEFT <br /> D  =  RIGHT <br /> S  =  DOWN <br /> SPACE  =  ATTACK <br /> </p>
+        <p id="scoreInfo">SCORING: <br /> (LVL*5) &#8195 PER TURN ALIVE  <br /> 25 &#8195 &#8195 &#8195 PER ZOMBIE KILLED <br /> 10 &#8195 &#8195 &#8195 PER FOOD PICKED UP  </p>
 
 </body>
 </html>

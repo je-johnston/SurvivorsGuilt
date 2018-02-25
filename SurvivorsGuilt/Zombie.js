@@ -43,6 +43,10 @@ class Zombie extends Entity {
         return this.isFacingRight;
     }
 
+    getIsSuper() {
+        return this.isSuperZombie;
+    }
+
     //Sets the current state of the Zombie.
     setState(st) {
         this.state = st;
