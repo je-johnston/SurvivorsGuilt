@@ -39,7 +39,8 @@ class DungeonMaster {
         this.maxFood = 200; //Maximum amount of food a player can carry.
         this.playerFood = 200; //Current amount of player food.
         this.foodValue = 40; //Amount of food gained when picked up.
-        this.actionCost = 5; //The cost (in food) of a given player action (move or attack).
+        this.moveCost = 5; //The cost (in food) of a given player move.
+        this.attackCost = 10; //The cost of an attack action.
         this.exitX = 8; //Exit X value.
         this.exitY = 1; //Exit Y value.
         this.playerStartX = 1; //Player starting X.
@@ -99,7 +100,12 @@ class DungeonMaster {
         this.updateUI();
         this.addListeners();
 
+        //Game Over variables.
+        var gameOverImage = AM.getAsset("./Assets/img/gameOver.png");
+        this.gameOverObj = new GameOver(gameEngine, gameOverImage, 110, 20);
 
+        //Start Audio.
+        this.audPlr = new audPlayer();
 
     }
 
@@ -200,7 +206,7 @@ class DungeonMaster {
         }
 
         if (this.currPlayerHealth <= 25) {
-            this.startBlink("healthElement");
+            //this.toggleBlink("healthElement");
             this.lowHealth = true;
         }
 
@@ -213,14 +219,34 @@ class DungeonMaster {
 
         this.inputAccepted = false;
         this.isGameOver = true;
+        this.endLevel();
         this.currPlayerHealth = 0;
         console.log("Game Over");
         this.updateUI();
-        this.Survivor.die();
-        
-        
+        this.Survivor.die(false);
+        this.gameOverObj.toggle(true);
 
     }
+
+    /**
+     *Resets the game.
+     */
+    resetGame() {
+        this.gameOverObj.toggle(false);
+        this.isGameOver = false;
+        this.currPlayerHealth = 100;
+        this.Survivor.die(true);
+        this.playerFood = 200;
+        this.currentLevel = 0;
+        this.playerScore = 0;
+        this.lowHealth = false;
+
+        this.updateUI;
+        this.createLevel();
+        console.log("Game Reset.");
+
+    }
+
 
 
 
@@ -266,15 +292,19 @@ class DungeonMaster {
         switch (keyPressed) {
             case 'w' || 'ArrowUp':
                 this.moveCharacter(this.Survivor, 'up');
+                this.playerFood -= this.moveCost;
                 break;
             case 'd' || 'ArrowRight':
                 this.moveCharacter(this.Survivor, 'right');
+                this.playerFood -= this.moveCost;
                 break;
             case 'a' || 'ArrowLeft':
                 this.moveCharacter(this.Survivor, 'left');
+                this.playerFood -= this.moveCost;
                 break;
             case 's' || 'ArrowDown':
                 this.moveCharacter(this.Survivor, 'down');
+                this.playerFood -= this.moveCost;
                 break;
             case ' ':
                 if (this.Survivor.getFacingRight()) {
@@ -294,7 +324,7 @@ class DungeonMaster {
                         that.survivorAttack();
                     }
                 }
-                
+                this.playerFood -= this.attackCost;
                 break;
             default:
                 console.log("Debug playerTurn");
@@ -304,7 +334,7 @@ class DungeonMaster {
         this.playerScore += (5 * (this.currentLevel));
 
         //Deduct food from player's total.
-        this.playerFood -= this.actionCost;
+        //this.playerFood -= this.moveCost;
     }
 
     /*
@@ -728,12 +758,18 @@ class DungeonMaster {
     addListeners() {
         document.addEventListener('keydown', (event) => {
             const keyName = event.key;
+            //console.log(keyName);
             //If the key pressed is equal to a valid entry key, begin turn.
             for (const k of this.validKeys) {
                 if (keyName === k && this.isGameOver === false) {
                     this.turn(keyName);
                 }
             }
+
+            if (this.isGameOver === true && keyName === 'Enter') {
+                this.resetGame();
+            }
+
         })
 
         var that = this;
@@ -804,15 +840,17 @@ class DungeonMaster {
     /*
     Causes the passed in element to blink.
     */
-    startBlink(domElem) {
+    toggleBlink(domElem, val) {
 
-        if (this.lowHealth === false) { 
+        //if (val == true) { 
 
-        var elem = document.getElementById(domElem);
-        setInterval(function () {
-            elem.style.display = (elem.style.display == 'none' ? '' : 'none');
-        }, 750);
-    }
+        //var elem = document.getElementById(domElem);
+        //setInterval(function () {
+        //    elem.style.display = (elem.style.display == 'none' ? '' : 'none');
+        //}, 750);
+    //}
+
+
     }
 
 

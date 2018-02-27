@@ -60,10 +60,13 @@
   <ItemGroup>
     <Content Include="animation.js" />
     <Content Include="assetmanager.js" />
-    <Content Include="Assets\Audio\scavengers_music.aif" />
+    <Content Include="Assets\Audio\scavengers_music.mp3" />
+    <Content Include="Assets\img\gameOver.png" />
+    <Content Include="audPlayer.js" />
     <Content Include="DungeonMaster.js" />
     <Content Include="Entity.js" />
     <Content Include="Food.js" />
+    <Content Include="GameOver.js" />
     <Content Include="LegacyFiles\GameBoard.js" />
     <Content Include="gameengine.js" />
     <Content Include="LegacyFiles\GameManager.js" />
@@ -90,9 +93,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\img\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

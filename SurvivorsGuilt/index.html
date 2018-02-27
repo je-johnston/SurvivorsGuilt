@@ -8,7 +8,9 @@
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./DungeonMaster.js"></script>
+    <script type="text/javascript" src="./audPlayer.js"></script>
     <script type="text/javascript" src="./Entity.js"></script>
+    <script type="text/javascript" src="./GameOver.js"></script>
     <script type="text/javascript" src="./Zombie.js"></script>
     <script type="text/javascript" src="./Food.js"></script>
     <script type="text/javascript" src="./Survivor.js"></script>
@@ -103,6 +105,16 @@
          font-family: arcadeClassic;
      }
 
+     #actionInfo {
+         color: white;
+         font-size: 24px;
+         position: absolute;
+         top: 385px;
+         left: 950px;
+         font-family: arcadeClassic;
+     }
+
+
  </style>
 
 </head>
@@ -113,7 +125,6 @@
    
     <p id="gameTitleElement"> SURVIVOR'S GUILT </p>
 
-
         <p id="healthElement"> Health: <span id="health"></span></p>
         <p id="foodElement">Food: <span id="food"></span> </p>
         <p id="turnElement"> Turn: <span id="turn"></span> </p>
@@ -121,6 +132,7 @@
         <p id="scoreElement"> Score: <span id="scr"></span></p>
         <p id="controls"> W = UP <br /> A  =  LEFT <br /> D  =  RIGHT <br /> S  =  DOWN <br /> SPACE  =  ATTACK <br /> </p>
         <p id="scoreInfo">SCORING: <br /> (LVL*5) &#8195 PER TURN ALIVE  <br /> 25 &#8195 &#8195 &#8195 PER ZOMBIE KILLED <br /> 10 &#8195 &#8195 &#8195 PER FOOD PICKED UP  </p>
+        <p id="actionInfo"> ACTION &#8194 COSTS: <br /> MOVE = 5 &#8194 FOOD <br /> ATTACK = 10 &#8194 FOOD</p>
 
 </body>
 </html>

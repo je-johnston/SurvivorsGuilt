@@ -83,9 +83,9 @@ class Survivor extends Entity {
     }
 
     //Disables rendering the player.
-    die() {
-        this.isAlive = false;
-        console.log('%c PLAYER DIED', 'color: red');
+    die(val) {
+        this.isAlive = val;
+        //console.log('%c PLAYER DIED', 'color: red');
     }
 
     //Gets the player's status.
