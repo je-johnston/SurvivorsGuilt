@@ -17,10 +17,12 @@ class audPlayer {
         }
 
         this.audButton.onmousedown = function () {
+            console.log("Audio Button Mouse Down");
             that.audButton.style.fontWeight = "bold";
         }
 
         this.audButton.onmouseup = function () {
+            console.log("Audio Button Mouse Up");
             that.audButton.style.fontWeight = "normal";
         }
 
@@ -29,6 +31,7 @@ class audPlayer {
     }
 
     toggleMusic() {
+        console.log("Toggling Music.");
         if (this.music.paused) {
             this.music.play();
         } else {
